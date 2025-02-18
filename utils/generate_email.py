@@ -1,5 +1,6 @@
 import random
 
+
 # Generate random email
 def generate_random_email():
     name = "testuser"

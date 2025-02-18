@@ -1,10 +1,9 @@
-from pages.base_page import BasePage
+"""User Account Page"""
+
 from locators.locators import PageLocators
-import time
+from pages.login_page import LoginPage
 
 
-class UserAccount(BasePage):
+class UserAccount(LoginPage):
     def user_logout(self):
-        """Click on log out button"""
-        time.sleep(1)
         self.click(PageLocators.LOGOUT_BUTTON)
