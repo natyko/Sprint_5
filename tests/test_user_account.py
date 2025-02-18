@@ -1,33 +1,33 @@
-import time
-
-from pages import user_account_page
+from config import BASE_URL, LOGIN_URL, TEST_USER
+from locators.locators import PageLocators
+from pages.user_account_page import UserAccount
 from pages.login_page import LoginPage
 
 
 def test_constructor_click(driver):
     """Test navigation from user account to constructor."""
     login_page = LoginPage(driver)
-
-    fixed_email = "naty@yopmail.com"
-    fixed_password = "Privet123"
-
-    login_page.open("https://stellarburgers.nomoreparties.site")
-    time.sleep(2)
+    login_page.open(BASE_URL)
     login_page.profile_login_button_front_page()
-    login_page.login_existing_user(fixed_email, fixed_password)
-    time.sleep(2)
-    login_page.user_login_click_constractor()
+    login_page.login_existing_user(TEST_USER["email"], TEST_USER["password"])
+    login_page.orders_button()
+    login_page.user_login_click_constructor()
+
+    # Verify the current URL is the constructor page
+    assert driver.current_url == f"{BASE_URL}/", (
+        "Failed to navigate to constructor page"
+    )
 
 
 def test_logout_button(driver):
     """Test clicking on the logout button."""
-    login_page = LoginPage(driver)
-    fixed_email = "123@yopmail.com"
-    fixed_password = "privet123$"
-    login_page.open("https://stellarburgers.nomoreparties.site/login")
-    time.sleep(1)
-    login_page.login_existing_user(fixed_email, fixed_password)
+    login_page = UserAccount(driver)
+    login_page.open(LOGIN_URL)
+    login_page.login_existing_user(TEST_USER["email"], TEST_USER["password"])
     login_page.profile_login_button_front_page()
-    login_page.profile_login_button_front_page()
-    time.sleep(2)
-    user_account_page.UserAccount(driver).user_logout()
+    login_page.user_logout()
+
+    # Verify successful logout
+    assert login_page.is_displayed(PageLocators.ENTER_BUTTON), (
+        "Login button not visible after logout"
+    )
